@@ -16,6 +16,8 @@ import scipy.cluster.hierarchy as sch
 from sklearn.cluster import AgglomerativeClustering
 # Importing Kmeans from sklearn
 from sklearn.cluster import KMeans
+# importing silhouette
+from sklearn.metrics import silhouette_score
 
 #________________________________________________________________________________________
 # Load customers Mall Daataset and necessary extractions
@@ -67,12 +69,19 @@ for m in ['ward','average','complete','single']:
 
     for j in range(2,8): #Actual rnge from 4 to 7
     
-        mTitle = "Agglomerative Clustering, #Clusters = " + str(j)+ " Linkage = "+ m
-        print(mTitle)
 
         Agg_hc = AgglomerativeClustering(n_clusters = j, affinity = 'euclidean', linkage = m)
         y_hc = Agg_hc.fit_predict(newdata) # model fitting on the dataset
+        
+        # computing silhouette avg coefficient alongside
+        silhouette_avg = silhouette_score(newdata, y_hc)
 
+
+        mTitle = "Agglomerative: #Clusters = " + str(j)+ " Linkage = "+ m + " Silhoette coeff = " + str(silhouette_avg)
+        
+        print(mTitle)
+
+        
         plt.scatter(indexdata, y_hc, 1,y_hc)
         plt.title('Values Plot ' + mTitle)
         plt.xlabel('Index')
